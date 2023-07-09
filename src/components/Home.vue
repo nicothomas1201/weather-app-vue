@@ -1,24 +1,33 @@
 <template>
-  {{ weather }}
+  <div 
+    :style="{'background-image': `url('/backgrounds/${background}.png')`}" 
+    class="container"
+  >
+    <PanelWeather  />
+  </div>  
 </template>
 
 <script setup>
   import { ref } from "vue";
-  import { getCurrentWeather, getLatLon, getWeeklyWeather } from "../services/index.js"
+  import useWeatherStore from "@/stores/weather.stores.js"
+  import PanelWeather from "./PanelWeather.vue";
 
-  const { lat, lon } = await getLatLon()
-  const data = await getCurrentWeather(lat, lon)
-  const weeklyWeather = await getWeeklyWeather(lat, lon)
+  const background = ref('soleado')
+  const weatherStore = useWeatherStore()
 
-  const weather = await data
-  
+  await weatherStore.fetchWeeklyWeather()
 
-  console.log(weeklyWeather)
-     
-  
-  
-  
-
-  // .then(res => console.log(res.data))
-  
 </script>
+
+<style scoped>
+.container{
+  block-size: 100vh;
+  inline-size: 100vw;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+}
+</style>
