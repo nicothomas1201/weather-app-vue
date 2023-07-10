@@ -28,7 +28,6 @@
   
   watch(selectDay, () => {
     weatherDay = weatherStore.filterByDay(selectDay.value)
-    console.log(weatherDay)
   }, { immediate: true })
 
 
@@ -38,7 +37,6 @@
 .container-tabs{
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 16px;
   padding: 16px;
   overflow: auto;
