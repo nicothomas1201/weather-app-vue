@@ -8,6 +8,6 @@ export async function getCurrentWeather(lat, lon){
 }
 
 export async function getWeeklyWeather(lat, lon){
-  const response = await weatherRequest.get(`/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}`)
+  const response = await weatherRequest.get(`/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`)
   return response.data
 }

@@ -9,26 +9,26 @@ export default defineStore('weather', {
   }),
 
   getters:{
-    formatByDay: (state) => (list) => {
-      
-      return list.filter((item, index, self) => {
-        const daysRepetidos = self.findIndex(item2 => moment(item2.dt_txt).format('dddd') === moment(item.dt_txt).format('dddd')) 
-        return daysRepetidos === index
-
-      })
-      .map( (item, index) => {
+    filterByDay: (state) => (selectDay) => {
+      return state.weeklyWeather.filter( item => {
         const day = moment(item.dt_txt).format('dddd')
-        return {
-          id: index,
-          day,
-          main: item.main,
-          weather: item.weather
-        }
-      })  
+        return day === selectDay
+      })      
     },
 
-    filterById: (state) => (id) => {
-      state.weeklyWeather.filter( dayWeek => dayWeek.id === id)
+    getDays: (state) => () =>{
+      return state.weeklyWeather.filter((item, index, self) => {
+        const daysRepetidos = self.findIndex(item2 => {
+          return moment(item2.dt_txt).format('dddd') === moment(item.dt_txt).format('dddd')
+        }) 
+        return daysRepetidos === index
+      }).map( item => moment(item.dt_txt).format('dddd'))
+    },    
+
+    getFirstDay: ( state ) => () => {
+      const textDate =state.weeklyWeather[0].dt_txt
+      const day = moment(textDate).format('dddd')
+      return day
     }
   },
 
@@ -40,7 +40,7 @@ export default defineStore('weather', {
     async fetchWeeklyWeather(){
       const { lat, lon } = await getLatLon()
       const  { list } = await getWeeklyWeather(lat, lon)
-      this.weeklyWeather = this.formatByDay(list)
+      this.weeklyWeather = list
     },
 
 

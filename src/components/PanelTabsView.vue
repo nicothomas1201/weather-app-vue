@@ -1,20 +1,48 @@
 <template>
-  <div>
-    {{  dayId }}
+  <div class="container-tabs" >
+    <TabWeather
+      v-for="(weather, index) in weatherDay"
+      :key="index"
+      :time="weather.dt_txt"
+      :url="`${baseIconUrl}/${weather.weather[0].icon}.png`" 
+      :temp="weather.main.temp"
+    />
   </div>  
 </template>
 
 <script setup>
-  import { toRefs } from 'vue';
+  import { toRefs, watch, reactive } from 'vue';
+  import useWeatherStore  from '../stores/weather.stores';
+  import TabWeather from './TabWeather.vue'
+  
+  const weatherStore = useWeatherStore()
+
+  let weatherDay = reactive()
+  const baseIconUrl = `https://openweathermap.org/img/w`
 
   const props = defineProps({
-    dayId: Number
+    selectDay: String
   })
 
-  const { dayId } = toRefs(props)
+  const { selectDay } = toRefs(props)
+  
+  watch(selectDay, () => {
+    weatherDay = weatherStore.filterByDay(selectDay.value)
+    console.log(weatherDay)
+  }, { immediate: true })
+
 
 </script>
 
 <style scoped>
+.container-tabs{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  overflow: auto;
+
+}
 
 </style>
